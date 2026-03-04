@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: BigKit
+server:
+  port: 8080
+
+# 文件上传配置
+file:
+  upload:
+    # 文件保存基础目录，可以是绝对路径或相对路径
+    # 生产环境建议使用绝对路径，如: /data/uploads
+    # 可以通过export FILE_UPLOAD_BASE_DIR设置路径，默认为uploads
+    base-dir: ${FILE_UPLOAD_BASE_DIR:uploads}
+  image:
+    # 10kb以内图片不予压缩
+    size-threshold: 10

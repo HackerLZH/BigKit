@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图片上传测试</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h2>图片上传测试</h2>
+    
+    <form id="uploadForm">
+        <div>
+            <label>选择图片文件:</label><br>
+            <input type="file" id="fileInput" name="files" multiple accept="image/*" required>
+        </div>
+        <br>
+        <div>
+            <label>会话ID (可选，留空则自动创建):</label><br>
+            <input type="text" id="sessionId" name="sessionId" placeholder="可选">
+        </div>
+        <br>
+        <button type="submit">上传图片</button>
+    </form>
+    
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('fileInput');
+            const sessionId = document.getElementById('sessionId').value;
+            
+            // 添加文件
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('files', fileInput.files[i]);
+            }
+            
+            // 添加会话ID（如果有）
+            if (sessionId) {
+                formData.append('sessionId', sessionId);
+            }
+            
+            // 发送请求
+            fetch('http://localhost:8080/api/images/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = 
+                    '<h3>上传结果:</h3>' +
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = 
+                    '<h3>错误:</h3><p>' + error.message + '</p>';
+            });
+        });
+    </script>
+</body>
+</html>
